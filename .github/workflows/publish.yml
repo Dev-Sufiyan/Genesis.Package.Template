@@ -28,7 +28,4 @@ jobs:
         run: dotnet pack --configuration Release --output ./nupkg
 
       - name: Publish NuGet package
-        uses: nuget/action@v2.0.0
-        with:
-          api-key: ${{ secrets.NUGET_API_KEY }}
-          packages: './nupkg/*.nupkg'
+        run: dotnet nuget push ./nupkg/*.nupkg --source 'nuget.org' --api-key ${{ secrets.NUGET_API_KEY }}
