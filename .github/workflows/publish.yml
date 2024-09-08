@@ -34,3 +34,5 @@ jobs:
         run: |
           echo "Publishing NuGet package..."
           dotnet nuget push ./nupkg/*.nupkg --source 'nuget.org' --api-key ${{ secrets.NUGET_API_KEY }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
