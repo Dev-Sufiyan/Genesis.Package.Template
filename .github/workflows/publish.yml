@@ -33,6 +33,6 @@ jobs:
       - name: Publish NuGet package
         run: |
           echo "Publishing NuGet package..."
-          dotnet nuget push ./nupkg/*.nupkg --source 'github' --api-key ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ./nupkg/*.nupkg --source 'github' --api-key ${{ secrets.PACKAGES_PUBLISH_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGES_PUBLISH_TOKEN: ${{ secrets.PACKAGES_PUBLISH_TOKEN }}
