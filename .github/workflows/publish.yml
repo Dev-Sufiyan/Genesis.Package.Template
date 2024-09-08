@@ -1,0 +1,34 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'  # Match your .NET version
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Pack
+        run: dotnet pack --configuration Release --output ./nupkg
+
+      - name: Publish NuGet package
+        uses: nuget/action@v2.0.0
+        with:
+          api-key: ${{ secrets.NUGET_API_KEY }}
+          packages: './nupkg/*.nupkg'
