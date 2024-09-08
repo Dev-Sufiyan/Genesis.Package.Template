@@ -2,8 +2,8 @@ name: Publish NuGet Package
 
 on:
   push:
-    tags:
-      - 'v*' 
+    branches:
+      - main  # Trigger on pushes to the main branch
 
 jobs:
   build:
@@ -16,13 +16,10 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '8.x'  # Match your .NET version
 
       - name: Restore dependencies
         run: dotnet restore
-
-      - name: Set version from Git tag
-        run: echo "Version=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
 
       - name: Build
         run: dotnet build --configuration Release
