@@ -27,10 +27,8 @@ jobs:
       - name: Pack
         run: dotnet pack --configuration Release --output ./nupkg
 
-      - name: Print API Key for Debugging
-        run: echo "API Key: ${{ secrets.NUGET_API_KEY }}"  # This will print the API key to debug. Be cautious about exposing sensitive data.
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: List NuGet Package Files
+        run: ls -al ./nupkg
 
       - name: Publish NuGet package
         run: |
