@@ -3,7 +3,8 @@ name: Publish NuGet Package on Release
 on:
   push:
     tags:
-      - v*
+      - v* 
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -17,9 +18,11 @@ jobs:
       with:
         dotnet-version: '8.x'
 
-    - name: Extract version from tag or branch
+    - name: Extract version from tag
       id: get_version
-      run: VERSION="${GITHUB_REF#refs/tags/v}"
+      run: |
+        VERSION="${GITHUB_REF#refs/tags/v}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Build the project
       run: dotnet build --configuration Release /p:Version=${{ env.VERSION }}
