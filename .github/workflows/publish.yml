@@ -23,12 +23,13 @@ jobs:
     - name: Extract version from tag or branch
       id: get_version
       run: |
-        if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+        if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
           VERSION="${GITHUB_REF#refs/tags/v}"   # Extract version from the tag (v1.0.0 -> 1.0.0)
         else
           VERSION="0.0.0-branch"  # Fallback version when on a branch (non-tagged build)
         fi
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "Version detected: $VERSION"
 
     - name: Build the project
       run: dotnet build --configuration Release /p:Version=${{ env.VERSION }}
