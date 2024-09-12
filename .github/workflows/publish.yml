@@ -18,17 +18,23 @@ jobs:
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.x' # Adjust the .NET version if needed
+        dotnet-version: '7.x'  # Adjust the .NET version if needed
 
-    - name: Extract version from tag
-      id: extract_version
-      run: echo "##[set-output name=VERSION;]${GITHUB_REF#refs/tags/v}"
+    - name: Extract version from tag or branch
+      id: get_version
+      run: |
+        if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+          VERSION="${GITHUB_REF#refs/tags/v}"   # Extract version from the tag (v1.0.0 -> 1.0.0)
+        else
+          VERSION="0.0.0-branch"  # Fallback version when on a branch (non-tagged build)
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Build the project
-      run: dotnet build --configuration Release /p:Version=${{ steps.extract_version.outputs.VERSION }}
+      run: dotnet build --configuration Release /p:Version=${{ env.VERSION }}
 
     - name: Pack the NuGet package
-      run: dotnet pack --configuration Release /p:PackageVersion=${{ steps.extract_version.outputs.VERSION }} --output ./artifacts
+      run: dotnet pack --configuration Release /p:PackageVersion=${{ env.VERSION }} --output ./artifacts
 
     - name: Publish to GitHub NuGet
       run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
