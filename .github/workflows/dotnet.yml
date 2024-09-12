@@ -28,4 +28,4 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: NuGet package Pack Check
-      run: dotnet pack --configuration Release /p:PackageVersion=0.0.0-PRCheck --output ./artifacts
+      run: dotnet pack /p:PackageVersion=0.0.0-PRCheck --output ./artifacts
