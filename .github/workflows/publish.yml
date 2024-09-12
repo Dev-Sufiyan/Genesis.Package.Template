@@ -3,36 +3,34 @@ name: Publish NuGet Package
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main
+    tags:
+      - v*  # Trigger on tags starting with 'v'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.x'  # Match your .NET version
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '0.x' # Adjust the .NET version if needed
 
-      - name: Restore dependencies
-        run: dotnet restore
+    - name: Extract version from tag
+      id: extract_version
+      run: echo "##[set-output name=VERSION;]${GITHUB_REF#refs/tags/v}"
 
-      - name: Build
-        run: dotnet build --configuration Release
+    - name: Build the project
+      run: dotnet build --configuration Release /p:Version=${{ steps.extract_version.outputs.VERSION }}
 
-      - name: Pack
-        run: dotnet pack --configuration Release --output ./nupkg
+    - name: Pack the NuGet package
+      run: dotnet pack --configuration Release /p:PackageVersion=${{ steps.extract_version.outputs.VERSION }} --output ./artifacts
 
-      - name: List NuGet Package Files
-        run: ls -al ./nupkg
-
-      - name: Publish NuGet package
-        run: |
-          echo "Publishing NuGet package..."
-          dotnet nuget push ./nupkg/*.nupkg --source https://nuget.pkg.github.com/dev.sufiyan/index.json --api-key ${{ secrets.PACKAGES_PUBLISH_TOKEN }}
-        env:
-          PACKAGES_PUBLISH_TOKEN: ${{ secrets.PACKAGES_PUBLISH_TOKEN }}
+    - name: Publish to GitHub NuGet
+      run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
