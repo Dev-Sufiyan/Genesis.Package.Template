@@ -5,9 +5,8 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>Genesis.Package.Template</PackageId>
-		<Version>1.0.1</Version>
 		<Authors>Mohmad Sufiyan</Authors>
-		<Description>Base class and necessary methods for DBContext EF framework</Description>
+		<Description>Base template to create NuGet packages</Description>
 		<RepositoryUrl>https://github.com/Dev-Sufiyan/Genesis.Package.Template</RepositoryUrl>
 	</PropertyGroup>
 </Project>
