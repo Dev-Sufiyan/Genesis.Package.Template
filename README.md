@@ -21,6 +21,10 @@ This template includes a GitHub Actions workflow that automates the build and pa
   - Pack the NuGet package.
   - Publish the package to GitHub NuGet.
 
+## 💡 Implementation (One Time)
+- **Create a GitHub Token:** [Create a new token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with the required scopes (`read:packages`, `write:packages`, `repo`).
+- **Create PAT Secret With Name PAT_TOKEN:** [create and use secrets in GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions).
+
 ## 🛠️ Usage
 
  - Create a release tag (`vX.X.X`) to trigger the pipeline.
