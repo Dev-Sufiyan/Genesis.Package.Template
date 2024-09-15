@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore
     
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Debug
     
     - name: Test
       run: dotnet test ./Genesis.Package.Template.Test/Genesis.Package.Template.Test.csproj --no-build --verbosity normal
